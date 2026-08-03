@@ -105,53 +105,85 @@
 
   /* Buttons */
   .btn-primary {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 300ms ease;
     background-color: rgb(var(--color-primary));
     color: rgb(var(--color-primary-foreground));
-    box-shadow: 0 0 0 0 rgba(0, 153, 255, 0);
+    border: none;
+    cursor: pointer;
   }
 
   .btn-primary:hover {
-    background-color: rgb(var(--color-primary) / 0.9);
+    background-color: rgb(0, 153, 255, 0.9);
     box-shadow: 0 8px 16px rgba(0, 153, 255, 0.5);
   }
 
   .btn-secondary {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 300ms ease;
     background-color: rgb(var(--color-secondary));
     color: rgb(var(--color-secondary-foreground));
+    border: none;
+    cursor: pointer;
   }
 
   .btn-secondary:hover {
-    background-color: rgb(var(--color-secondary) / 0.9);
+    background-color: rgb(0, 217, 255, 0.9);
     box-shadow: 0 8px 16px rgba(0, 217, 255, 0.5);
   }
 
   .btn-outline {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-300;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 300ms ease;
     border: 1px solid rgb(var(--color-primary));
     color: rgb(var(--color-primary));
+    background-color: transparent;
+    cursor: pointer;
   }
 
   .btn-outline:hover {
-    background-color: rgb(var(--color-primary) / 0.1);
+    background-color: rgb(0, 153, 255, 0.1);
   }
 
   /* Cards */
   .card-base {
-    @apply glass p-4 transition-all duration-300 hover:border-white/20;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 300ms ease;
+  }
+
+  .card-base:hover {
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   .card-elevated {
-    @apply glass-lg p-6 shadow-xl shadow-black/20;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 0, 0, 0.2);
   }
 
   /* Input Styles */
   .input-base {
-    @apply w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-300;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 8px;
     background-color: rgb(var(--color-input));
     border: 1px solid rgb(var(--color-border));
     color: rgb(var(--color-foreground));
+    transition: all 300ms ease;
+    font-size: 16px;
   }
 
   .input-base::placeholder {
@@ -159,16 +191,22 @@
   }
 
   .input-base:focus {
+    outline: none;
     border-color: rgb(var(--color-primary));
-    box-shadow: 0 0 0 2px rgb(var(--color-primary) / 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.3);
   }
 
   /* Badge Styles */
   .badge-primary {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-    background-color: rgb(var(--color-primary) / 0.2);
-    color: rgb(var(--color-primary));
-    border: 1px solid rgb(var(--color-primary) / 0.3);
+    display: inline-flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: rgba(0, 153, 255, 0.2);
+    color: rgb(0, 153, 255);
+    border: 1px solid rgba(0, 153, 255, 0.3);
   }
 
   .badge-success {
