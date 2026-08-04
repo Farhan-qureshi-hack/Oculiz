@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { LandingHeader } from '@/components/layout/landing-header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Shield,
@@ -14,10 +13,8 @@ import {
   Eye,
   Fingerprint,
   TrendingUp,
-  ChevronRight,
   Check,
   ArrowRight,
-  AlertCircle,
   Cpu,
 } from 'lucide-react';
 
@@ -25,32 +22,32 @@ const features = [
   {
     icon: Zap,
     title: 'Generate AI Images',
-    description: 'Create stunning AI images with integrated models like DALL-E, Midjourney, and more.',
+    description: 'Create stunning AI images with integrated models.',
   },
   {
     icon: Lock,
     title: 'Secure Ownership',
-    description: 'Register ownership with encrypted steganographic embedding invisible to the eye.',
+    description: 'Register ownership with encrypted steganographic embedding.',
   },
   {
     icon: Eye,
     title: 'Advanced Verification',
-    description: 'Verify image authenticity and detect tampering with forensic analysis.',
+    description: 'Verify image authenticity with forensic analysis.',
   },
   {
     icon: Fingerprint,
     title: 'Digital Fingerprints',
-    description: 'Create unique digital signatures for complete provenance tracking.',
+    description: 'Create unique digital signatures for provenance tracking.',
   },
   {
     icon: Shield,
     title: 'Tampering Detection',
-    description: 'Instantly detect any modifications or alterations to protected images.',
+    description: 'Instantly detect any modifications to protected images.',
   },
   {
     icon: TrendingUp,
     title: 'Analytics Dashboard',
-    description: 'Track your image portfolio with comprehensive analytics and insights.',
+    description: 'Track your image portfolio with comprehensive insights.',
   },
 ];
 
@@ -98,50 +95,23 @@ const pricing = [
 const faqItems = [
   {
     question: 'How does steganography protect my images?',
-    answer: 'We use advanced steganographic techniques to embed ownership metadata invisibly within the image data, making it impossible to detect or remove without specialized tools.',
+    answer: 'Our technology embeds ownership data invisibly into the image, making it impossible to remove without detection.',
   },
   {
-    question: 'Can I verify images from any source?',
-    answer: 'Yes! You can upload images generated from any AI model - DALL-E, Midjourney, Stable Diffusion, Gemini, or any other source.',
+    question: 'Can anyone verify my images?',
+    answer: 'Yes, anyone can use our verification tool. You can choose to share verification links publicly or keep them private.',
   },
   {
-    question: 'What happens if my image is tampered with?',
-    answer: 'Our forensic analysis will detect any modifications and flag them in the verification report, showing exactly what was changed.',
+    question: 'How long does verification take?',
+    answer: 'Our advanced forensic analysis typically completes in under 30 seconds.',
   },
   {
-    question: 'Is my ownership data private?',
-    answer: 'Absolutely. All ownership metadata is encrypted and stored securely. You have complete control over who can access your verification reports.',
+    question: 'Is my data private and secure?',
+    answer: 'We use military-grade encryption. Your images and ownership data are never shared with third parties.',
   },
   {
-    question: 'Do you support batch processing?',
-    answer: 'Yes, our API allows batch verification of images, making it perfect for organizations processing large volumes.',
-  },
-  {
-    question: 'What file formats are supported?',
-    answer: 'We support PNG, JPEG, WebP, and TIFF formats. Higher quality images provide better forensic analysis results.',
-  },
-];
-
-const steps = [
-  {
-    number: '01',
-    title: 'Generate or Upload',
-    description: 'Create AI images with our integrated models or upload existing ones.',
-  },
-  {
-    number: '02',
-    title: 'Register Ownership',
-    description: 'Embed encrypted ownership metadata using steganography.',
-  },
-  {
-    number: '03',
-    title: 'Share Protected Images',
-    description: 'Distribute your protected images with full provenance tracking.',
-  },
-  {
-    number: '04',
-    title: 'Verify Anytime',
-    description: 'Anyone can verify ownership and authenticity instantly.',
+    question: 'Can I export my verification reports?',
+    answer: 'Yes, Professional and Enterprise plans include comprehensive export and API access.',
   },
 ];
 
@@ -150,7 +120,7 @@ export default function Home() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <LandingHeader
         isOpen={mobileMenuOpen}
         onToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -161,39 +131,38 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-6 animate-slide-up">
-            <Badge variant="secondary" className="w-fit">
+            <Badge className="badge-primary w-fit">
               <Cpu className="w-3 h-3 mr-2" />
-              AI-Powered Verification Platform
+              AI-Powered Verification
             </Badge>
 
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-              Prove AI Image{' '}
-              <span className="text-gradient-blue-cyan">Ownership</span>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight text-slate-900 dark:text-slate-50">
+              Prove AI Image <span className="text-blue-600 dark:text-blue-400">Ownership</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-md">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-md">
               Protect, verify, and prove ownership of AI-generated images with invisible steganographic watermarking and advanced forensic analysis.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" asChild>
+              <Button className="btn btn-primary" asChild>
                 <Link href="/register">
                   Get Started Free
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
+              <Button className="btn btn-outline" asChild>
                 <Link href="#features">Learn More</Link>
               </Button>
             </div>
 
-            <div className="flex gap-6 text-sm text-muted-foreground pt-4">
+            <div className="flex gap-6 text-sm text-slate-600 dark:text-slate-400 pt-4">
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-primary" />
+                <Check className="w-4 h-4 text-blue-600" />
                 <span>No credit card required</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-primary" />
+                <Check className="w-4 h-4 text-blue-600" />
                 <span>24/7 Support</span>
               </div>
             </div>
@@ -201,14 +170,14 @@ export default function Home() {
 
           {/* Right Content - Hero Image */}
           <div className="relative h-96 md:h-full min-h-96">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl blur-3xl"></div>
-            <div className="relative glass-lg h-full flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl blur-3xl"></div>
+            <div className="card relative h-full flex items-center justify-center">
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
                   <Shield className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold">AI Image Protection</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold text-slate-900 dark:text-slate-50">AI Image Protection</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   Military-grade encryption meets invisible watermarking
                 </p>
               </div>
@@ -220,11 +189,11 @@ export default function Home() {
       {/* Features Section */}
       <section id="features" className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
         <div className="text-center mb-12">
-          <Badge variant="accent" className="mb-4">Features</Badge>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          <Badge className="badge-primary mb-4">Features</Badge>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-slate-50">
             Everything You Need to Protect AI Images
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Comprehensive tools for image generation, ownership registration, verification, and forensic analysis.
           </p>
         </div>
@@ -233,54 +202,39 @@ export default function Home() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card key={index} className="card-base">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardContent>
-              </Card>
+              <div key={index} className="card card-hover">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+                  <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="font-semibold mb-2 text-slate-900 dark:text-slate-50">{feature.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">{feature.description}</p>
+              </div>
             );
           })}
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="px-4 sm:px-6 py-16 md:py-24 bg-white/5 w-full">
+      {/* How It Works */}
+      <section id="how-it-works" className="px-4 sm:px-6 py-16 md:py-24 bg-slate-50 dark:bg-slate-900/50 w-full">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4">Process</Badge>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Simple 4-Step Process
+            <Badge className="badge-primary mb-4">Process</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-slate-50">
+              How OCULIZ Works
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From image creation to verified ownership in minutes.
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
-            {steps.map((step, index) => (
-              <div key={index} className="relative">
-                <Card className="card-base text-center h-full">
-                  <CardContent className="pt-6">
-                    <div className="text-4xl font-bold text-primary/30 mb-4">
-                      {step.number}
-                    </div>
-                    <h3 className="font-semibold text-lg mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {step.description}
-                    </p>
-                  </CardContent>
-                </Card>
-                {index < steps.length - 1 && (
-                  <ChevronRight className="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 text-primary/30" />
-                )}
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { number: '01', title: 'Generate', description: 'Create or upload an AI image' },
+              { number: '02', title: 'Register', description: 'Embed ownership with steganography' },
+              { number: '03', title: 'Protect', description: 'Get instant verification link' },
+              { number: '04', title: 'Verify', description: 'Anyone can verify authenticity' },
+            ].map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4">{step.number}</div>
+                <h3 className="font-semibold mb-2 text-slate-900 dark:text-slate-50">{step.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400">{step.description}</p>
               </div>
             ))}
           </div>
@@ -290,94 +244,62 @@ export default function Home() {
       {/* Pricing Section */}
       <section id="pricing" className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
         <div className="text-center mb-12">
-          <Badge variant="accent" className="mb-4">Pricing</Badge>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Flexible Plans for Every Creator
+          <Badge className="badge-primary mb-4">Pricing</Badge>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-slate-50">
+            Simple, Transparent Pricing
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose the perfect plan for your needs. Upgrade anytime.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {pricing.map((plan, index) => (
-            <Card
+            <div
               key={index}
-              className={`card-elevated flex flex-col ${
-                plan.highlighted ? 'ring-2 ring-primary transform md:scale-105' : ''
-              }`}
+              className={`card ${plan.highlighted ? 'ring-2 ring-blue-600' : ''}`}
             >
-              {plan.highlighted && (
-                <Badge variant="default" className="w-fit -mb-4">
-                  Most Popular
-                </Badge>
-              )}
-              <CardHeader>
-                <CardTitle>{plan.name}</CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  {plan.price !== 'Custom' && (
-                    <span className="text-muted-foreground">/month</span>
-                  )}
-                </div>
-                <ul className="space-y-3">
-                  {plan.features.map((feature, fIndex) => (
-                    <li key={fIndex} className="flex items-start gap-3">
-                      <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  variant={plan.highlighted ? 'default' : 'outline'}
-                  className="w-full mt-auto"
-                >
-                  Get Started
-                </Button>
-              </CardContent>
-            </Card>
+              <h3 className="font-bold text-xl mb-1 text-slate-900 dark:text-slate-50">{plan.name}</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{plan.description}</p>
+              <div className="text-4xl font-bold mb-6 text-slate-900 dark:text-slate-50">{plan.price}</div>
+              <ul className="space-y-3 mb-6">
+                {plan.features.map((feature, fi) => (
+                  <li key={fi} className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
+                    <Check className="w-4 h-4 mt-0.5 text-blue-600 flex-shrink-0" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="btn btn-primary w-full" asChild>
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </div>
           ))}
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="px-4 sm:px-6 py-16 md:py-24 bg-white/5 w-full">
+      <section id="faq" className="px-4 sm:px-6 py-16 md:py-24 bg-slate-50 dark:bg-slate-900/50 w-full">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4">FAQ</Badge>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            <Badge className="badge-primary mb-4">FAQ</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-slate-50">
               Frequently Asked Questions
             </h2>
           </div>
 
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <Card
+              <button
                 key={index}
-                className="card-base cursor-pointer"
-                onClick={() =>
-                  setExpandedFaq(expandedFaq === index ? null : index)
-                }
+                onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                className="card w-full text-left"
               >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-base">{item.question}</CardTitle>
-                    <ChevronRight
-                      className={`w-5 h-5 text-primary flex-shrink-0 transition-transform ${
-                        expandedFaq === index ? 'rotate-90' : ''
-                      }`}
-                    />
-                  </div>
-                </CardHeader>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-slate-900 dark:text-slate-50">{item.question}</h3>
+                  <span className="text-blue-600 dark:text-blue-400">{expandedFaq === index ? '−' : '+'}</span>
+                </div>
                 {expandedFaq === index && (
-                  <CardContent className="border-t border-white/10 pt-4">
-                    <p className="text-muted-foreground">{item.answer}</p>
-                  </CardContent>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mt-4">{item.answer}</p>
                 )}
-              </Card>
+              </button>
             ))}
           </div>
         </div>
@@ -385,27 +307,20 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
-        <Card className="card-elevated bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-purple-500/10">
-          <CardContent className="pt-12 text-center space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">
-              Ready to Protect Your AI Images?
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join creators and studios worldwide using OCULIZ to prove ownership and verify authenticity.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" asChild>
-                <Link href="/register">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="#contact">Schedule Demo</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="card bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 text-center">
+          <h2 className="text-4xl font-bold mb-4 text-slate-900 dark:text-slate-50">Ready to Protect Your Images?</h2>
+          <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
+            Join thousands of creators, studios, and media companies using OCULIZ to protect AI-generated images.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button className="btn btn-primary" asChild>
+              <Link href="/register">Get Started Free</Link>
+            </Button>
+            <Button className="btn btn-outline" asChild>
+              <Link href="#faq">Learn More</Link>
+            </Button>
+          </div>
+        </div>
       </section>
 
       <Footer />
