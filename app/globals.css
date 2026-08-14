@@ -37,7 +37,15 @@ button, input, textarea, select { font: inherit; }
 
 @keyframes float-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 @keyframes draw-line { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
+@keyframes logo-pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(47,111,237,.3); } 30% { transform: scale(1.04); box-shadow: 0 0 0 10px rgba(47,111,237,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(47,111,237,0); } }
+@keyframes particle-travel { 0% { opacity: 0; transform: translate(0, 0) scale(.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(110px, -30px) scale(1.2); } }
 .animate-float-soft { animation: float-soft 5s ease-in-out infinite; }
+.logo-trigger-active { animation: logo-pulse 900ms ease-out; }
+.logo-particles { position: absolute; right: -30px; top: 8px; color: #2f6fed; font: 500 10px/1 "IBM Plex Mono", monospace; letter-spacing: 7px; animation: particle-travel 2.1s ease-out forwards; white-space: nowrap; }
+.scene-pin { position: sticky; top: 96px; }
+.scene-track { min-height: 180vh; }
+@media (prefers-reduced-motion: reduce) { .logo-trigger-active, .logo-particles { animation: none; } }
+
 
 .shell-grid {
   background-image: linear-gradient(to right, rgba(47,111,237,.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(47,111,237,.06) 1px, transparent 1px);
