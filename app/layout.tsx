@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'OCULIZ - AI Image Ownership & Verification',
-  description: 'Protect, verify, and prove ownership of AI-generated images with advanced forensic analysis.',
-  keywords: 'AI image, ownership, verification, forensic, steganography, authenticity',
+  title: 'OCULIZ — Protect. Verify. Own.',
+  description: 'The trust layer for AI-generated imagery. Register provenance, verify authenticity, and defend digital ownership.',
+  keywords: 'AI image provenance, image ownership, verification, forensic analysis, authenticity',
 };
 
 export const viewport: Viewport = {
@@ -21,16 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-background">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
