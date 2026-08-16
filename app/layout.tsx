@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { ThemeBootstrap } from '@/components/theme/theme-bootstrap';
 
 export const metadata: Metadata = {
   title: 'OCULIZ — Protect. Verify. Own.',
@@ -28,7 +29,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: `(() => { try { const stored = localStorage.getItem('oculiz-theme'); const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; document.documentElement.classList.toggle('dark', dark); document.documentElement.style.colorScheme = dark ? 'dark' : 'light'; } catch {} })()` }} />
+        <ThemeBootstrap />
         {children}
       </body>
     </html>

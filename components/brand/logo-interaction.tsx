@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const logoUrl = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT_Image_Aug_3__2026__07_28_34_PM-removebg-preview-VS5SxVWz50yZaR3h0oljYvoouFegqa.png';
+const logoUrl = '/brand/oculiz-logo.png';
 
 export function LogoInteraction({ compact = false }: { compact?: boolean }) {
   const [active, setActive] = useState(false);
