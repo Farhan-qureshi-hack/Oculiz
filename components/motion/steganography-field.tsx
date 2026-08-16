@@ -61,8 +61,9 @@ export function SteganographyField({ formation = 'dust', density = 220, classNam
       context.setTransform(scale, 0, 0, scale, 0, 0)
     }
     const readScroll = () => {
-      const bounds = canvas.getBoundingClientRect()
-      targetProgress = Math.max(0, Math.min(1, (window.innerHeight * 0.72 - bounds.top) / Math.max(1, bounds.height - window.innerHeight * 0.3)))
+      const section = canvas.closest('section')
+      const bounds = (section ?? canvas).getBoundingClientRect()
+      targetProgress = Math.max(0, Math.min(1, (window.innerHeight * 0.78 - bounds.top) / Math.max(1, bounds.height - window.innerHeight * 0.22)))
     }
     const move = (event: PointerEvent) => {
       if (!interactive) return
@@ -71,7 +72,7 @@ export function SteganographyField({ formation = 'dust', density = 220, classNam
     }
     const draw = () => {
       time += 0.012
-      progress += (targetProgress - progress) * (reduced ? 0.2 : 0.075)
+      progress += (targetProgress - progress) * (reduced ? 0.16 : 0.028)
       context.clearRect(0, 0, width, height)
       const formationMix = formation === 'dust' ? progress : Math.min(1, progress * 1.35)
       points.forEach((point, index) => {
@@ -95,13 +96,16 @@ export function SteganographyField({ formation = 'dust', density = 220, classNam
         context.fillStyle = `rgba(104, 167, 255, ${Math.max(0.08, alpha)})`
         context.arc(x, y, size, 0, Math.PI * 2)
         context.fill()
-        if (progress > 0.48 && index % 14 === 0) {
-          context.strokeStyle = `rgba(119, 180, 255, ${0.1 * progress})`
-          context.lineWidth = 0.5
-          context.beginPath()
-          context.moveTo(x, y)
-          context.lineTo(width * 0.5, height * 0.5)
-          context.stroke()
+        if (progress > 0.5 && index % 18 === 0) {
+          const next = points[index + 1]
+          if (next) {
+            context.strokeStyle = `rgba(119, 180, 255, ${0.18 * progress})`
+            context.lineWidth = 0.6
+            context.beginPath()
+            context.moveTo(x, y)
+            context.lineTo((next.dustX + (next.orbitX - next.dustX) * formationMix) * width, (next.dustY + (next.orbitY - next.dustY) * formationMix) * height)
+            context.stroke()
+          }
         }
       })
       raf = requestAnimationFrame(draw)
