@@ -95,8 +95,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-white/10">
-            <div className="glass-sm p-4 text-center">
+          <div className="border-t border-slate-200 p-4 dark:border-slate-800">
+            <div className="panel p-4 text-center">
               <p className="text-xs text-muted-foreground mb-2">
                 Premium Plan Active
               </p>
