@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -36,6 +37,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 html.dark body { background: #0e1726; color: #eef4fb; }
+html, body, header, section, footer, button, a, .panel { transition: background-color .75s var(--ease-oculiz), border-color .75s var(--ease-oculiz), color .75s var(--ease-oculiz), box-shadow .75s var(--ease-oculiz); }
+html.theme-transitioning::before { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background: radial-gradient(circle at var(--theme-x, 50%) var(--theme-y, 8%), rgba(47,111,237,.16), transparent 24%); animation: theme-wash .85s var(--ease-oculiz) both; }
+.logo-shell { background: rgba(255,255,255,.9); }
+html.dark .logo-shell { background: rgba(255,255,255,.96); }
+.scene-stage { background: var(--scene-bg, #f7f9fc); }
+html.dark .scene-stage { --scene-bg: #0e1726; }
+.tool-entry { background: var(--scene-bg, #f7f9fc); }
+html.dark .tool-entry { --scene-bg: #0e1726; }
+.tool-destination-line { position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: #2f6fed; transition: width .7s var(--ease-oculiz); }
+.tool-destination.is-active .tool-destination-line, .tool-destination:hover .tool-destination-line, .tool-destination:focus-visible .tool-destination-line { width: 100%; }
+.tool-destination.is-active { background: rgba(47,111,237,.045); }
+@keyframes theme-wash { from { opacity: 0; transform: scale(.7); } 35% { opacity: 1; } to { opacity: 0; transform: scale(1.3); } }
 html.dark .bg-background { background-color: #0e1726; }
 html.dark .bg-white { background-color: #101c2d; }
 html.dark .text-slate-950 { color: #f8fbff; }
