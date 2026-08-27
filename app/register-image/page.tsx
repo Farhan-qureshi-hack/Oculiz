@@ -31,6 +31,9 @@ export default function RegisterImagePage() {
     email: 'john@example.com',
     ownershipType: 'creator',
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [apiError, setApiError] = useState('');
   const [isProtecting, setIsProtecting] = useState(false);
   const [protectionStatus, setProtectionStatus] = useState<'idle' | 'processing' | 'success'>('idle');
   const [protectedImageUrl, setProtectedImageUrl] = useState('');
@@ -65,27 +68,19 @@ export default function RegisterImagePage() {
     }
   };
 
-  const processFile = (file: File) => {
-    setIsProcessing(true);
-    setUploadedFileName(file.name);
-
-    // Simulate file reading
-    setTimeout(() => {
-      setUploadedImage(URL.createObjectURL(file));
-      setIsProcessing(false);
-    }, 500);
+  const processFile = async (file: File) => {
+    if (file.type !== 'image/png') { setApiError('OCULIZ currently requires PNG files so the embedded signal survives lossless encoding.'); return }
+    setIsProcessing(true); setApiError(''); setSelectedFile(file); setUploadedFileName(file.name); setUploadedImage(URL.createObjectURL(file));
+    const form = new FormData(); form.append('image', file); form.append('analyzeOnly', 'true')
+    const response = await fetch('/api/analyze', { method: 'POST', body: form }); const result = await response.json(); setAnalysis(result.provenance ?? null); setIsProcessing(false)
   };
 
   const handleProtect = async () => {
-    setIsProtecting(true);
-    setProtectionStatus('processing');
-
-    // Simulate protection process
-    setTimeout(() => {
-      setProtectionStatus('success');
-      setProtectedImageUrl('protected_' + Date.now());
-      setIsProtecting(false);
-    }, 2000);
+    if (!selectedFile) return; setIsProtecting(true); setProtectionStatus('processing'); setApiError('')
+    const form = new FormData(); form.append('image', selectedFile); form.append('ownerName', ownerDetails.fullName); form.append('ownerEmail', ownerDetails.email); form.append('ownershipType', ownerDetails.ownershipType)
+    const response = await fetch('/api/protect', { method: 'POST', body: form }); const result = await response.json()
+    if (!response.ok) { setApiError(result.error ?? 'Unable to protect image'); setIsProtecting(false); setProtectionStatus('idle'); return }
+    setProtectedImageUrl(result.assetId); setAnalysis(result.provenance); const link = document.createElement('a'); link.href = `data:image/png;base64,${result.protectedImage}`; link.download = result.filename; link.click(); setProtectionStatus('success'); setIsProtecting(false)
   };
 
   const handleCopyId = () => {
@@ -298,6 +293,10 @@ export default function RegisterImagePage() {
                 </CardContent>
               </Card>
 
+              {apiError && <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300">{apiError}</div>}
+              {analysis && uploadedImage && (
+                <Card className="card-elevated"><CardHeader><CardTitle className="text-lg">Forensic signal report</CardTitle><CardDescription>Evidence found in the uploaded file before OCULIZ registration.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">AI likely</span><Badge variant={analysis.aiLikely ? 'warning' : 'secondary'}>{analysis.aiLikely ? 'Evidence found' : 'No reliable marker'}</Badge></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Model</span><span className="text-sm">{analysis.model ?? 'Unknown'}</span></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Generation date</span><span className="text-sm">{analysis.generatedAt ?? 'Not embedded'}</span></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Generator identity</span><span className="text-sm">Not inferable</span></div><p className="text-xs leading-5 text-muted-foreground">IP addresses, emails, and human identities are only reported when explicitly present in signed metadata; pixels cannot prove who created an image.</p></CardContent></Card>
+              )}
               {uploadedImage && (
                 <Card className="card-elevated">
                   <CardHeader>
