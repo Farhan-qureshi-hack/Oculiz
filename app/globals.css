@@ -49,6 +49,33 @@ html.dark .tool-entry { --scene-bg: #0e1726; }
 .tool-destination.is-active .tool-destination-line, .tool-destination:hover .tool-destination-line, .tool-destination:focus-visible .tool-destination-line { width: 100%; }
 .tool-destination.is-active { background: rgba(47,111,237,.045); }
 @keyframes theme-wash { from { opacity: 0; transform: scale(.7); } 35% { opacity: 1; } to { opacity: 0; transform: scale(1.3); } }
+
+/* Shared application pages use the same quiet, evidence-led language as the homepage. */
+.card-elevated, .glass, .glass-sm {
+  background: rgba(255,255,255,.72) !important;
+  border: 1px solid rgba(148,163,184,.26) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 60px rgba(30,65,110,.08) !important;
+  backdrop-filter: blur(18px);
+}
+html.dark .card-elevated, html.dark .glass, html.dark .glass-sm {
+  background: rgba(15,29,48,.76) !important;
+  border-color: rgba(116,160,231,.22) !important;
+  box-shadow: 0 18px 70px rgba(0,0,0,.24) !important;
+}
+.dashboard-page, main { background: #f7f9fc; }
+html.dark .dashboard-page, html.dark main { background: #0e1726; }
+main h1, main h2, main h3, main h4 { letter-spacing: -.045em; }
+main input, main select, main textarea { background: rgba(255,255,255,.72) !important; border-color: rgba(148,163,184,.32) !important; color: #0f172a !important; }
+html.dark main input, html.dark main select, html.dark main textarea { background: rgba(15,29,48,.72) !important; border-color: rgba(116,160,231,.24) !important; color: #eef4fb !important; }
+html.dark main .border-white\/10 { border-color: rgba(116,160,231,.2) !important; }
+html.dark main .text-white { color: #eef4fb !important; }
+aside { background: #f7f9fc !important; color: #142033; }
+html.dark aside { background: #0e1726 !important; color: #eef4fb; }
+aside a { color: #68758a; }
+aside a:hover { color: #142033; background: rgba(47,111,237,.06); }
+html.dark aside a { color: #9fb0c7; }
+html.dark aside a:hover { color: #eef4fb; background: rgba(47,111,237,.1); }
 html.dark .bg-background { background-color: #0e1726; }
 html.dark .bg-white { background-color: #101c2d; }
 html.dark .text-slate-950 { color: #f8fbff; }
