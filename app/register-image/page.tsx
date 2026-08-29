@@ -36,6 +36,8 @@ export default function RegisterImagePage() {
   const [apiError, setApiError] = useState('');
   const [isProtecting, setIsProtecting] = useState(false);
   const [protectionStatus, setProtectionStatus] = useState<'idle' | 'processing' | 'success'>('idle');
+  const [protectionStage, setProtectionStage] = useState(0);
+  const protectionStages = ['Scanning metadata', 'Computing fingerprint', 'Generating ownership key', 'Embedding steganographic payload', 'Writing protected image', 'Verifying embedded signature'];
   const [protectedImageUrl, setProtectedImageUrl] = useState('');
   const [protectedImageData, setProtectedImageData] = useState('');
   const [protectedFileName, setProtectedFileName] = useState('oculiz-protected.png');
@@ -78,11 +80,12 @@ export default function RegisterImagePage() {
   };
 
   const handleProtect = async () => {
-    if (!selectedFile) return; setIsProtecting(true); setProtectionStatus('processing'); setApiError('')
+    if (!selectedFile) return; setIsProtecting(true); setProtectionStatus('processing'); setProtectionStage(0); setApiError('')
+    const stageTimer = window.setInterval(() => setProtectionStage((stage) => Math.min(stage + 1, protectionStages.length - 1)), 520)
     const form = new FormData(); form.append('image', selectedFile); form.append('ownerName', ownerDetails.fullName); form.append('ownerEmail', ownerDetails.email); form.append('ownershipType', ownerDetails.ownershipType)
     const response = await fetch('/api/protect', { method: 'POST', body: form }); const result = await response.json()
-    if (!response.ok) { setApiError(result.error ?? 'Unable to protect image'); setIsProtecting(false); setProtectionStatus('idle'); return }
-    setProtectedImageUrl(result.assetId); setProtectedImageData(result.protectedImage); setProtectedFileName(result.filename); setAnalysis(result.provenance); setProtectionStatus('success'); setIsProtecting(false)
+    if (!response.ok) { window.clearInterval(stageTimer); setApiError(result.error ?? 'Unable to protect image'); setIsProtecting(false); setProtectionStatus('idle'); return }
+    window.clearInterval(stageTimer); setProtectionStage(protectionStages.length - 1); setProtectedImageUrl(result.assetId); setProtectedImageData(result.protectedImage); setProtectedFileName(result.filename); setAnalysis(result.provenance); setProtectionStatus('success'); setIsProtecting(false)
   };
 
   const handleDownload = () => {
@@ -304,7 +307,14 @@ export default function RegisterImagePage() {
 
               {apiError && <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300">{apiError}</div>}
               {analysis && uploadedImage && (
-                <Card className="card-elevated"><CardHeader><CardTitle className="text-lg">Forensic signal report</CardTitle><CardDescription>Evidence found in the uploaded file before OCULIZ registration.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">AI likely</span><Badge variant={analysis.aiLikely ? 'warning' : 'secondary'}>{analysis.aiLikely ? 'Evidence found' : 'No reliable marker'}</Badge></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Model</span><span className="text-sm">{analysis.model ?? 'Unknown'}</span></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Generation date</span><span className="text-sm">{analysis.generatedAt ?? 'Not embedded'}</span></div><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Generator identity</span><span className="text-sm">Not inferable</span></div><p className="text-xs leading-5 text-muted-foreground">IP addresses, emails, and human identities are only reported when explicitly present in signed metadata; pixels cannot prove who created an image.</p></CardContent></Card>
+                <Card className="card-elevated oculiz-enter">
+                  <CardHeader><CardTitle className="text-lg">Forensic signal report</CardTitle><CardDescription>Every check is evidence-based. A missing marker is not proof that an image is human-made.</CardDescription></CardHeader>
+                  <CardContent className="flex flex-col gap-3">
+                    {analysis.checks?.map((check: { name: string; status: string; detail: string }) => <div key={check.name} className="rounded-lg border border-border/70 p-3"><div className="flex items-center justify-between gap-3"><span className="text-sm font-medium">{check.name}</span><Badge variant={check.status === 'passed' ? 'default' : check.status === 'warning' ? 'outline' : 'secondary'}>{check.status}</Badge></div><p className="mt-1 text-xs leading-5 text-muted-foreground">{check.detail}</p></div>)}
+                    <div className="grid gap-3 sm:grid-cols-2"><div><p className="text-xs text-muted-foreground">Detected model</p><p className="text-sm">{analysis.model ?? 'Not found in metadata'}</p></div><div><p className="text-xs text-muted-foreground">Generation date</p><p className="text-sm">{analysis.generatedAt ?? 'Not embedded'}</p></div></div>
+                    <p className="text-xs leading-5 text-muted-foreground">OCULIZ can implant and verify ownership metadata, but cannot infer an IP address, email, or person from pixels. Those fields require signed metadata or an authorized provider record.</p>
+                  </CardContent>
+                </Card>
               )}
               {uploadedImage && (
                 <Card className="card-elevated">
@@ -409,13 +419,14 @@ export default function RegisterImagePage() {
 
                   <div className="pt-4 border-t border-white/10 text-xs text-muted-foreground space-y-2">
                     <p>
-                      This information will be encrypted and embedded invisibly in your image using advanced steganography.
+                      This information will be signed and embedded invisibly in your PNG using OCULIZ least-significant-bit steganography.
                     </p>
                     <p>
                       Only you can decrypt and view this metadata with your unique keys.
                     </p>
                   </div>
 
+                  {isProtecting && <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 oculiz-enter"><div className="mb-3 flex items-center justify-between"><span className="text-sm font-medium">OCULIZ protection pipeline</span><span className="font-mono text-xs text-muted-foreground">{protectionStage + 1}/{protectionStages.length}</span></div><div className="flex flex-col gap-2">{protectionStages.map((stage, index) => <div key={stage} className={`flex items-center gap-3 rounded-md px-3 py-2 text-xs transition-all duration-300 ${index === protectionStage ? 'bg-primary/15 text-foreground' : index < protectionStage ? 'text-muted-foreground' : 'text-muted-foreground/50'}`}><span className="flex size-5 items-center justify-center rounded-full border border-border font-mono">{index < protectionStage ? '✓' : index + 1}</span><span>{stage}</span></div>)}</div></div>}
                   <Button
                     onClick={handleProtect}
                     disabled={!uploadedImage || isProtecting}
