@@ -9,8 +9,6 @@ import {
   Upload,
   CheckCircle,
   Clock,
-  FileText,
-  BarChart3,
   Settings,
   Shield,
   X,
@@ -29,8 +27,6 @@ const navItems = [
   { icon: Upload, label: 'Register Image', href: '/register-image' },
   { icon: CheckCircle, label: 'Verify Image', href: '/verify' },
   { icon: Clock, label: 'Image History', href: '/history' },
-  { icon: FileText, label: 'Reports', href: '/reports' },
-  { icon: BarChart3, label: 'Analytics', href: '/analytics' },
   { icon: Settings, label: 'Settings', href: '/settings' },
   { icon: Shield, label: 'Admin', href: '/admin' },
 ];

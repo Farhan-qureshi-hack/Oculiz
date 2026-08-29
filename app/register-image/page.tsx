@@ -37,6 +37,8 @@ export default function RegisterImagePage() {
   const [isProtecting, setIsProtecting] = useState(false);
   const [protectionStatus, setProtectionStatus] = useState<'idle' | 'processing' | 'success'>('idle');
   const [protectedImageUrl, setProtectedImageUrl] = useState('');
+  const [protectedImageData, setProtectedImageData] = useState('');
+  const [protectedFileName, setProtectedFileName] = useState('oculiz-protected.png');
   const [copiedId, setCopiedId] = useState(false);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -80,8 +82,15 @@ export default function RegisterImagePage() {
     const form = new FormData(); form.append('image', selectedFile); form.append('ownerName', ownerDetails.fullName); form.append('ownerEmail', ownerDetails.email); form.append('ownershipType', ownerDetails.ownershipType)
     const response = await fetch('/api/protect', { method: 'POST', body: form }); const result = await response.json()
     if (!response.ok) { setApiError(result.error ?? 'Unable to protect image'); setIsProtecting(false); setProtectionStatus('idle'); return }
-    setProtectedImageUrl(result.assetId); setAnalysis(result.provenance); const link = document.createElement('a'); link.href = `data:image/png;base64,${result.protectedImage}`; link.download = result.filename; link.click(); setProtectionStatus('success'); setIsProtecting(false)
+    setProtectedImageUrl(result.assetId); setProtectedImageData(result.protectedImage); setProtectedFileName(result.filename); setAnalysis(result.provenance); setProtectionStatus('success'); setIsProtecting(false)
   };
+
+  const handleDownload = () => {
+    if (!protectedImageData) return
+    const bytes = Uint8Array.from(atob(protectedImageData), (char) => char.charCodeAt(0))
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'image/png' }))
+    const link = document.createElement('a'); link.href = url; link.download = protectedFileName; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
 
   const handleCopyId = () => {
     if (protectedImageUrl) {
@@ -93,7 +102,7 @@ export default function RegisterImagePage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full oculiz-enter">
         {/* Header */}
         <div>
           <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
@@ -176,7 +185,7 @@ export default function RegisterImagePage() {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button variant="outline" className="flex-1">
+                    <Button variant="outline" className="flex-1" onClick={handleDownload} disabled={!protectedImageData}>
                       <Download className="w-4 h-4 mr-2" />
                       Download Protected
                     </Button>

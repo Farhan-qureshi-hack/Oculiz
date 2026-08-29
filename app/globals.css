@@ -49,6 +49,9 @@ html.dark .tool-entry { --scene-bg: #0e1726; }
 .tool-destination.is-active .tool-destination-line, .tool-destination:hover .tool-destination-line, .tool-destination:focus-visible .tool-destination-line { width: 100%; }
 .tool-destination.is-active { background: rgba(47,111,237,.045); }
 @keyframes theme-wash { from { opacity: 0; transform: scale(.7); } 35% { opacity: 1; } to { opacity: 0; transform: scale(1.3); } }
+@keyframes oculiz-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.oculiz-enter { animation: oculiz-rise 420ms var(--ease-oculiz) both; }
+@media (prefers-reduced-motion: reduce) { .oculiz-enter { animation: none; } }
 
 /* Shared application pages use the same quiet, evidence-led language as the homepage. */
 .card-elevated, .glass, .glass-sm {
