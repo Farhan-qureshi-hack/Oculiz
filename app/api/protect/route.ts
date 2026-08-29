@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const protectedImage = embedPayload(image, payload)
     const protectedPng = encodePng(protectedImage)
     const [asset] = await getDb().insert(oculizAssets).values({ originalName: file.name, mimeType: 'image/png', width: image.width, height: image.height, originalSha256: sha256(source), protectedSha256: sha256(protectedPng), payloadVersion: '1', payloadBytes: JSON.stringify(payload).length, status: 'protected', provenanceData: provenance, forensicConfidence: provenance.confidence.toFixed(2), aiModelDetected: provenance.model, aiGenerationDate: provenance.generatedAt ? new Date(provenance.generatedAt) : null, generatorMetadata: { findings: provenance.findings, limitations: provenance.limitations }, registrationSignature: payload.signature }).returning()
-    return NextResponse.json({ protected: true, assetId: asset.id, filename: `oculiz-${file.name.replace(/[^a-z0-9._-]/gi, '-')}`, protectedImage: Buffer.from(protectedPng).toString('base64'), provenance })
+    return NextResponse.json({ protected: true, assetId: asset.id, filename: `oculiz-${file.name.replace(/[^a-z0-9._-]/gi, '-')}`, protectedImage: Buffer.from(protectedPng).toString('base64'), security: process.env.OCULIZ_ENCRYPTION_KEY ? 'AES-256-GCM authenticated encryption' : 'integrity-only; OCULIZ_ENCRYPTION_KEY is not configured', provenance })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to protect image.'
     return NextResponse.json({ error: message }, { status: 422 })

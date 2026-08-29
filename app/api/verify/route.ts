@@ -18,9 +18,13 @@ export async function POST(request: Request) {
     const payload = extractPayload(image)
     const provenance = analyzeProvenance(bytes)
     const [asset] = await getDb().select().from(oculizAssets).where(eq(oculizAssets.id, payload.assetId)).limit(1)
-    const details = { payload, provenance, registered: Boolean(asset), storedProvenance: asset?.provenanceData ?? null, registeredSignature: asset?.registrationSignature ?? null }
-    await getDb().insert(oculizVerificationEvents).values({ assetId: payload.assetId, result: asset ? 'valid' : 'unregistered', confidence: asset ? '100.00' : (provenance.confidence * 100).toFixed(2), extractedSha256: sha256(new Uint8Array(image.data)), details })
-    return NextResponse.json({ valid: Boolean(asset), confidence: asset ? 100 : provenance.confidence * 100, payload, provenance, registered: Boolean(asset), storedProvenance: asset?.provenanceData ?? null })
+    const currentSha256 = sha256(bytes)
+    const fingerprintMatches = Boolean(asset && asset.protectedSha256 === currentSha256)
+    const payloadAuthenticated = payload.security === 'AES-256-GCM'
+    const valid = Boolean(asset && fingerprintMatches && payloadAuthenticated)
+    const details = { payload, payloadAuthenticated, provenance, registered: Boolean(asset), fingerprintMatches, currentSha256, storedFingerprint: asset?.protectedSha256 ?? null, storedProvenance: asset?.provenanceData ?? null, registeredSignature: asset?.registrationSignature ?? null }
+    await getDb().insert(oculizVerificationEvents).values({ assetId: payload.assetId, result: valid ? 'valid' : 'tampered', confidence: valid ? '100.00' : '0.00', extractedSha256: currentSha256, details })
+    return NextResponse.json({ valid, status: valid ? 'verified' : asset ? 'tampered' : 'unregistered', confidence: valid ? 100 : 0, payload, payloadAuthenticated, provenance, registered: Boolean(asset), fingerprintMatches, currentSha256, storedProvenance: asset?.provenanceData ?? null })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to verify image.'
     const status = error instanceof SteganographyError && error.code === 'NOT_FOUND' ? 200 : 422

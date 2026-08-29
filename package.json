@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "test:backend": "tsx scripts/steganography.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
@@ -37,6 +38,7 @@
     "@types/pg": "^8.23.1",
     "@types/pngjs": "^6.0.5",
     "eslint": "^9.0.0",
-    "eslint-config-next": "^16.0.0"
+    "eslint-config-next": "^16.0.0",
+    "tsx": "^4.23.12"
   }
 }
