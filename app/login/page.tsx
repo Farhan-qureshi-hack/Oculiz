@@ -14,12 +14,13 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => setIsLoading(false), 1000);
+    setError('Authentication is not connected yet. No sign-in request was sent.');
+    setIsLoading(false);
   };
 
   return (
@@ -68,6 +69,8 @@ export default function LoginPage() {
                 </span>
               </div>
             </div>
+
+            {error && <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</p>}
 
             {/* Email Form */}
             <form onSubmit={handleSubmit} className="space-y-4">

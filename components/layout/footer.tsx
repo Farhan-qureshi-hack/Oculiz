@@ -31,7 +31,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Features
@@ -39,7 +39,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Pricing
@@ -47,7 +47,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Documentation
@@ -55,7 +55,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   API
@@ -70,7 +70,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   About
@@ -78,7 +78,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Blog
@@ -86,7 +86,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Careers
@@ -94,7 +94,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Contact
@@ -109,7 +109,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Privacy Policy
@@ -117,7 +117,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Terms of Service
@@ -125,7 +125,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Security
@@ -133,7 +133,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Compliance
@@ -155,28 +155,30 @@ export function Footer() {
           {/* Social Links */}
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://github.com/Farhan-qureshi-hack/Oculiz"
+              target="_blank"
+              rel="noreferrer"
               className="p-2 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="GitHub"
             >
               <Github className="w-5 h-5 text-muted-foreground hover:text-primary" />
             </a>
             <a
-              href="#"
+              href="/"
               className="p-2 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="Twitter"
             >
               <Twitter className="w-5 h-5 text-muted-foreground hover:text-primary" />
             </a>
             <a
-              href="#"
+              href="/"
               className="p-2 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin className="w-5 h-5 text-muted-foreground hover:text-primary" />
             </a>
             <a
-              href="#"
+              href="/"
               className="p-2 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="Email"
             >

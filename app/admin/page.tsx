@@ -1,5 +1,6 @@
 'use client';
 
+import useSWR from 'swr';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react';
 
 export default function AdminPage() {
+  const { data: health } = useSWR<{ ok: boolean; database: string; encryption: string }>('/api/health', (url: string) => fetch(url).then((response) => response.json()))
   return (
     <DashboardLayout>
       <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -93,15 +95,15 @@ export default function AdminPage() {
           <CardHeader>
             <CardTitle>System Status</CardTitle>
             <CardDescription>
-              Current health of platform services
+              Live health is available from the backend health endpoint; historical uptime is not collected yet.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              { name: 'API Server', status: 'Online', uptime: '99.9%' },
-              { name: 'Database', status: 'Online', uptime: '99.99%' },
-              { name: 'Image Processing', status: 'Online', uptime: '99.5%' },
-              { name: 'Verification Engine', status: 'Online', uptime: '99.8%' },
+              { name: 'API Server', status: health?.ok ? 'Online' : 'Unavailable', uptime: 'Live check' },
+              { name: 'Database', status: health?.database === 'connected' ? 'Connected' : 'Unavailable', uptime: 'Live check' },
+              { name: 'Image Processing', status: 'Available', uptime: 'No uptime history' },
+              { name: 'Verification Engine', status: 'Available', uptime: 'No uptime history' },
             ].map((service, i) => (
               <div
                 key={i}
@@ -110,7 +112,7 @@ export default function AdminPage() {
                 <div>
                   <p className="font-medium text-sm">{service.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    Uptime: {service.uptime}
+                    Historical uptime: not collected
                   </p>
                 </div>
                 <Badge variant="success">

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import useSWR from 'swr';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Button } from '@/components/ui/button';
@@ -33,7 +34,7 @@ import {
   Legend,
 } from 'recharts';
 
-const chartData = [
+const chartData: Array<{ month: string; verified: number; protected: number }> = [
   { month: 'Jan', verified: 40, protected: 24 },
   { month: 'Feb', verified: 50, protected: 35 },
   { month: 'Mar', verified: 65, protected: 45 },
@@ -42,7 +43,7 @@ const chartData = [
   { month: 'Jun', verified: 120, protected: 110 },
 ];
 
-const recentActivities = [
+const recentActivities: Array<{ id: number; type: string; title: string; description: string; timestamp: string; status: string }> = [
   {
     id: 1,
     type: 'verified',
@@ -145,10 +146,16 @@ const stats = [
 
 export default function DashboardPage() {
   const [selectedTimeRange, setSelectedTimeRange] = useState('6m');
+  const { data: registry, error: registryError } = useSWR<{ assets: Array<{ status: string }> }>('/api/assets', (url: string) => fetch(url).then((response) => response.json()))
+  const protectedCount = registry?.assets.filter((asset) => asset.status === 'protected').length ?? 0
+  const verifiedCount = registry?.assets.filter((asset) => asset.status === 'registered').length ?? 0
+  const visibleRecentActivities = registry ? [] : []
+  const visibleProtectedImages = registry ? [] : []
 
   return (
     <DashboardLayout>
       <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full">
+        {registryError && <Card className="border-destructive/30 bg-destructive/10"><CardContent className="p-4 text-sm text-destructive">Live registry metrics are unavailable. No fabricated totals are shown for unavailable data.</CardContent></Card>}
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
@@ -186,11 +193,11 @@ export default function DashboardPage() {
                   <Icon className="w-4 h-4 text-primary" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-2xl font-bold">{stat.label === 'Protected Images' ? protectedCount : stat.label === 'Verifications' ? verifiedCount : '—'}</div>
                   <div className="flex items-center gap-1 text-xs mt-2">
-                    <ArrowUpRight className={`w-3 h-3 ${stat.positive ? 'text-emerald-400' : 'text-red-400'}`} />
+                    <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
                     <span className={stat.positive ? 'text-emerald-400' : 'text-red-400'}>
-                      {stat.change}
+                      {registry ? 'Live' : 'Unavailable'}
                     </span>
                     <span className="text-muted-foreground">
                       vs last month
@@ -223,7 +230,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData}>
+                <BarChart data={registry ? [] : []}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="month" stroke="rgba(255,255,255,0.5)" />
                   <YAxis stroke="rgba(255,255,255,0.5)" />
@@ -300,7 +307,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentActivities.map((activity) => (
+                {visibleRecentActivities.map((activity) => (
                   <div
                     key={activity.id}
                     className="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors"
@@ -333,7 +340,7 @@ export default function DashboardPage() {
               <CardDescription>Your most recent images</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {recentProtectedImages.map((image) => (
+              {visibleProtectedImages.map((image) => (
                 <div
                   key={image.id}
                   className="p-3 rounded-lg border border-white/10 hover:border-white/20 transition-colors group"

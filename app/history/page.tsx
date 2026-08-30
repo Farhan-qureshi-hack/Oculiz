@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import useSWR from 'swr';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +19,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+
+const fetcher = (url: string) => fetch(url).then((response) => { if (!response.ok) throw new Error('Unable to load asset registry'); return response.json() })
 
 const imageHistoryData = [
   {
@@ -86,9 +89,12 @@ export default function HistoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const { data, error, isLoading } = useSWR<{ assets: Array<{ id: string; originalName: string; mimeType: string; status: string; createdAt: string }> }>('/api/assets', fetcher)
+  const liveData = (data?.assets ?? []).map((asset) => ({ id: asset.id, name: asset.originalName, mimeType: asset.mimeType, size: 'Registry record', status: asset.status, date: new Date(asset.createdAt).toLocaleDateString(), verified: 0, generated: false, thumbnail: '' }))
+  const sourceData = data ? liveData : []
 
   const itemsPerPage = 6;
-  const filteredData = imageHistoryData.filter((item) => {
+  const filteredData = sourceData.filter((item) => {
     const matchesSearch = item.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -156,16 +162,18 @@ export default function HistoryPage() {
           </CardContent>
         </Card>
 
+        {isLoading && <Card className="card-elevated p-6 text-muted-foreground">Loading the live asset registry…</Card>}
+        {error && <Card className="card-elevated p-6 text-destructive">The asset registry could not be loaded. Try again after checking backend health.</Card>}
         {/* Images Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedItems.map((item) => (
             <Card key={item.id} className="card-base group overflow-hidden">
               <div className="relative aspect-square bg-white/5 overflow-hidden">
-                <img
+                {item.thumbnail ? <img
                   src={item.thumbnail}
                   alt={item.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+                /> : <div className="flex h-full items-center justify-center p-6 text-center text-sm text-muted-foreground">Live registry record<br />{item.mimeType ?? 'PNG asset'}</div>}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                   <Button size="sm" variant="ghost">
                     <Eye className="w-4 h-4" />
