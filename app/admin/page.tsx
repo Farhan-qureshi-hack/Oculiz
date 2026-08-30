@@ -17,6 +17,7 @@ import {
 
 export default function AdminPage() {
   const { data: health } = useSWR<{ ok: boolean; database: string; encryption: string }>('/api/health', (url: string) => fetch(url).then((response) => response.json()))
+  const { data: assets } = useSWR<{ assets: unknown[] }>('/api/assets', (url: string) => fetch(url).then((response) => response.json()))
   return (
     <DashboardLayout>
       <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -40,7 +41,7 @@ export default function AdminPage() {
                   <p className="text-sm text-muted-foreground mb-1">
                     Total Users
                   </p>
-                  <p className="text-3xl font-bold">1,234</p>
+                  <p className="text-3xl font-bold">—</p>
                 </div>
                 <Users className="w-6 h-6 text-primary opacity-50" />
               </div>
@@ -54,7 +55,7 @@ export default function AdminPage() {
                   <p className="text-sm text-muted-foreground mb-1">
                     Total Images
                   </p>
-                  <p className="text-3xl font-bold">45,678</p>
+                  <p className="text-3xl font-bold">{assets ? assets.assets.length : '—'}</p>
                 </div>
                 <FileText className="w-6 h-6 text-secondary opacity-50" />
               </div>
@@ -68,7 +69,7 @@ export default function AdminPage() {
                   <p className="text-sm text-muted-foreground mb-1">
                     API Calls
                   </p>
-                  <p className="text-3xl font-bold">234K</p>
+                  <p className="text-3xl font-bold">—</p>
                 </div>
                 <BarChart3 className="w-6 h-6 text-accent opacity-50" />
               </div>
@@ -132,12 +133,8 @@ export default function AdminPage() {
               <CardDescription>Latest user actions</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {[
-                { action: 'User Registration', user: 'alice@example.com', time: '5 min ago' },
-                { action: 'Image Protected', user: 'bob@example.com', time: '12 min ago' },
-                { action: 'Verification', user: 'charlie@example.com', time: '23 min ago' },
-                { action: 'Report Downloaded', user: 'diana@example.com', time: '1 hour ago' },
-              ].map((item, i) => (
+              <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">No activity feed is connected. No sample users or events are shown.</p>
+              {([] as Array<{ action: string; user: string; time: string }>).map((item, i) => (
                 <div
                   key={i}
                   className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
@@ -161,31 +158,8 @@ export default function AdminPage() {
               <CardDescription>Active system notifications</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-sm">High API Usage</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      API requests at 85% of daily limit
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">No alert feed is connected. No synthetic incidents or backup claims are shown.</p>
 
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-sm">Backup Completed</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Daily backup completed successfully
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <Button className="w-full">View All Alerts</Button>
             </CardContent>
           </Card>
         </div>

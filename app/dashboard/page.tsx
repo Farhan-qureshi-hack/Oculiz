@@ -149,8 +149,8 @@ export default function DashboardPage() {
   const { data: registry, error: registryError } = useSWR<{ assets: Array<{ status: string }> }>('/api/assets', (url: string) => fetch(url).then((response) => response.json()))
   const protectedCount = registry?.assets.filter((asset) => asset.status === 'protected').length ?? 0
   const verifiedCount = registry?.assets.filter((asset) => asset.status === 'registered').length ?? 0
-  const visibleRecentActivities = registry ? [] : []
-  const visibleProtectedImages = registry ? [] : []
+  const visibleRecentActivities: Array<{ id: number; title: string; description: string; status: string; timestamp: string }> = registry ? [] : []
+  const visibleProtectedImages: Array<{ id: number; name: string; size: string; verified: number }> = registry ? [] : []
 
   return (
     <DashboardLayout>
@@ -161,7 +161,7 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-3xl md:text-4xl font-bold">Dashboard</h1>
             <p className="text-muted-foreground mt-1">
-              Welcome back, John! Here&apos;s your image protection summary.
+              Live registry and verification summary. Values appear only when the backend returns them.
             </p>
           </div>
           <div className="flex gap-2">
@@ -258,7 +258,7 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Storage Used</span>
-                  <span className="font-medium">4.2 GB / 100 GB</span>
+                  <span className="font-medium">Not collected</span>
                 </div>
                 <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
                   <div className="bg-primary h-full" style={{ width: '4.2%' }}></div>
@@ -268,7 +268,7 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">API Requests</span>
-                  <span className="font-medium">1,234 / 10,000</span>
+                  <span className="font-medium">Not collected</span>
                 </div>
                 <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
                   <div className="bg-secondary h-full" style={{ width: '12.34%' }}></div>
@@ -278,19 +278,14 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Verifications</span>
-                  <span className="font-medium">95 / 100</span>
+                  <span className="font-medium">{registry ? `${verifiedCount} registered` : 'Not collected'}</span>
                 </div>
                 <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
                   <div className="bg-accent h-full" style={{ width: '95%' }}></div>
                 </div>
               </div>
 
-              <div className="pt-4">
-                <Badge variant="warning" className="w-full justify-center py-2">
-                  <AlertTriangle className="w-3 h-3 mr-2" />
-                  Upgrade to Pro
-                </Badge>
-              </div>
+              <div className="pt-4"><p className="text-xs text-muted-foreground">Usage limits and billing are not connected.</p></div>
             </CardContent>
           </Card>
         </div>
