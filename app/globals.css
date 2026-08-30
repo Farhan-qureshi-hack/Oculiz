@@ -51,7 +51,21 @@ html.dark .tool-entry { --scene-bg: #0e1726; }
 @keyframes theme-wash { from { opacity: 0; transform: scale(.7); } 35% { opacity: 1; } to { opacity: 0; transform: scale(1.3); } }
 @keyframes oculiz-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .oculiz-enter { animation: oculiz-rise 420ms var(--ease-oculiz) both; }
-@media (prefers-reduced-motion: reduce) { .oculiz-enter { animation: none; } }
+@keyframes oculiz-scan { 0% { transform: translateX(-120%); opacity: 0; } 18% { opacity: .9; } 55%, 100% { transform: translateX(120%); opacity: 0; } }
+@keyframes oculiz-orbit { to { transform: rotate(360deg); } }
+@keyframes oculiz-glint { 0%, 55% { transform: translateX(-140%) rotate(18deg); } 78%, 100% { transform: translateX(140%) rotate(18deg); } }
+@keyframes oculiz-breathe { 0%, 100% { box-shadow: 0 0 0 0 rgba(47,111,237,0); } 50% { box-shadow: 0 0 0 8px rgba(47,111,237,.08), 0 0 36px rgba(47,111,237,.12); } }
+.oculiz-enter { animation: oculiz-rise 420ms var(--ease-oculiz) both; }
+.oculiz-scanline { position: relative; overflow: hidden; }
+.oculiz-scanline::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 34%; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(126,182,255,.2), transparent); animation: oculiz-scan 5s var(--ease-oculiz) infinite; }
+.oculiz-glint { position: relative; overflow: hidden; }
+.oculiz-glint::after { content: ''; position: absolute; inset: -40% auto -40% -25%; width: 18%; pointer-events: none; background: rgba(255,255,255,.2); filter: blur(16px); animation: oculiz-glint 6s var(--ease-oculiz) infinite; }
+.oculiz-breathe { animation: oculiz-breathe 3.6s ease-in-out infinite; }
+.oculiz-geometry { position: relative; isolation: isolate; }
+.oculiz-geometry::before, .oculiz-geometry::after { content: ''; position: absolute; z-index: -1; pointer-events: none; border: 1px solid rgba(47,111,237,.16); }
+.oculiz-geometry::before { inset: 12%; transform: rotate(45deg); border-radius: 18%; animation: oculiz-orbit 24s linear infinite; }
+.oculiz-geometry::after { inset: 22%; transform: rotate(30deg); border-radius: 50%; animation: oculiz-orbit 18s linear infinite reverse; }
+@media (prefers-reduced-motion: reduce) { .oculiz-enter, .oculiz-scanline::after, .oculiz-glint::after, .oculiz-breathe, .oculiz-geometry::before, .oculiz-geometry::after { animation: none; } }
 
 /* Shared application pages use the same quiet, evidence-led language as the homepage. */
 .card-elevated, .glass, .glass-sm {
