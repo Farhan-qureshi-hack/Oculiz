@@ -65,6 +65,9 @@ html.dark .tool-entry { --scene-bg: #0e1726; }
 .oculiz-dust::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .7; background-image: radial-gradient(circle, rgba(126,182,255,.42) 0 1px, transparent 1.5px), radial-gradient(circle, rgba(255,255,255,.2) 0 1px, transparent 1.5px); background-position: 11px 19px, 71px 43px; background-size: 97px 83px, 151px 127px; mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent); animation: oculiz-dust-drift 24s linear infinite; }
 @keyframes oculiz-dust-drift { to { background-position: 108px 102px, -80px 170px; } }
 .oculiz-geometry { position: relative; isolation: isolate; }
+.home-flow .card-elevated, .home-flow .glass, .home-flow .glass-sm { border-color: rgba(126,182,255,.12) !important; box-shadow: none !important; }
+.home-flow .tool-entry { background: transparent; }
+.home-flow .scene-stage + .scene-stage, .home-flow section + section { border-color: rgba(126,182,255,.12); }
 .oculiz-geometry::before, .oculiz-geometry::after { content: ''; position: absolute; z-index: -1; pointer-events: none; border: 1px solid rgba(47,111,237,.16); }
 .oculiz-geometry::before { inset: 12%; transform: rotate(45deg); border-radius: 18%; animation: oculiz-orbit 24s linear infinite; }
 .oculiz-geometry::after { inset: 22%; transform: rotate(30deg); border-radius: 50%; animation: oculiz-orbit 18s linear infinite reverse; }
