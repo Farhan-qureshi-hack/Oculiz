@@ -8,14 +8,14 @@ export type ProvenanceReport = { aiLikely: boolean; model: string | null; genera
 
 const text = (bytes: Uint8Array) => new TextDecoder('latin1').decode(bytes)
 
-export async function analyzeProvenance(bytes: Uint8Array): Promise<ProvenanceReport> {
+export async function analyzeProvenance(bytes: Uint8Array, mimeType = 'image/png'): Promise<ProvenanceReport> {
   const rawLower = text(bytes).toLowerCase()
   const exif = await exifr.parse(bytes, { tiff: true, xmp: true, iptc: true, jfif: true, ihdr: true }).catch(() => null) as Record<string, unknown> | null
   const pngText = [...rawLower.matchAll(/(gpt-image|openai media service api|actionssoftwareagentname|c2pa\.created|c2pa\.converted|trainedalgorithmicmedia|claim_generator_info[^\\0]*)/gi)].map((match) => match[1])
   const c2paActions = pngText.filter((value) => value.includes('c2pa.'))
   const generator = typeof exif?.ActionsSoftwareAgentName === 'string' ? exif.ActionsSoftwareAgentName : rawLower.includes('openai media service api') ? 'OpenAI Media Service API' : null
   const model = typeof exif?.ActionsSoftwareAgentName === 'string' ? exif.ActionsSoftwareAgentName : rawLower.includes('gpt-image') ? 'gpt-image' : null
-  const metadata: ProvenanceMetadata = { fileSize: bytes.byteLength, mimeType: 'image/png', width: typeof exif?.ImageWidth === 'number' ? exif.ImageWidth : null, height: typeof exif?.ImageHeight === 'number' ? exif.ImageHeight : null, bitDepth: typeof exif?.BitDepth === 'number' ? exif.BitDepth : null, colorType: typeof exif?.ColorType === 'number' ? exif.ColorType : null, modifyDate: typeof exif?.ModifyDate === 'string' ? exif.ModifyDate : null, title: typeof exif?.Title === 'string' ? exif.Title : null, software: typeof exif?.Software === 'string' ? exif.Software : null, actions: c2paActions, c2pa: { detected: rawLower.includes('c2pa') || Boolean(exif?.JUMBF), generator, version: typeof exif?.ActionsSoftwareAgentVersion === 'string' ? exif.ActionsSoftwareAgentVersion : null, actions: c2paActions, signaturePresent: rawLower.includes('signature') || rawLower.includes('sigts') } }
+  const metadata: ProvenanceMetadata = { fileSize: bytes.byteLength, mimeType, width: typeof exif?.ImageWidth === 'number' ? exif.ImageWidth : null, height: typeof exif?.ImageHeight === 'number' ? exif.ImageHeight : null, bitDepth: typeof exif?.BitDepth === 'number' ? exif.BitDepth : null, colorType: typeof exif?.ColorType === 'number' ? exif.ColorType : null, modifyDate: typeof exif?.ModifyDate === 'string' ? exif.ModifyDate : null, title: typeof exif?.Title === 'string' ? exif.Title : null, software: typeof exif?.Software === 'string' ? exif.Software : null, actions: c2paActions, c2pa: { detected: rawLower.includes('c2pa') || Boolean(exif?.JUMBF), generator, version: typeof exif?.ActionsSoftwareAgentVersion === 'string' ? exif.ActionsSoftwareAgentVersion : null, actions: c2paActions, signaturePresent: rawLower.includes('signature') || rawLower.includes('sigts') } }
 
   const raw = text(bytes)
   const findings: ProvenanceFinding[] = []
