@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const bytes = Buffer.from(await file.arrayBuffer())
     const image = decodePng(bytes)
     const payload = extractPayload(image)
-    const provenance = analyzeProvenance(bytes)
+    const provenance = await analyzeProvenance(bytes)
     const [asset] = await getDb().select().from(oculizAssets).where(eq(oculizAssets.id, payload.assetId)).limit(1)
     const currentSha256 = sha256(bytes)
     const fingerprintMatches = Boolean(asset && asset.protectedSha256 === currentSha256)

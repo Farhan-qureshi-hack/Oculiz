@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const source = Buffer.from(await file.arrayBuffer())
     const image = decodePng(source)
     if (image.width < 16 || image.height < 16) return NextResponse.json({ code: 'IMAGE_TOO_SMALL', error: 'Image must be at least 16×16 pixels.' }, { status: 422 })
-    const provenance = analyzeProvenance(source)
+    const provenance = await analyzeProvenance(source)
     const assetId = createAssetId()
     const ownerName = String(form.get('ownerName') ?? '').slice(0, 120)
     const ownerEmail = String(form.get('ownerEmail') ?? '').slice(0, 200)

@@ -7,6 +7,8 @@ export async function POST(request: Request) {
   const form = await request.formData()
   const file = form.get('image')
   if (!(file instanceof File) || file.type !== 'image/png') return NextResponse.json({ error: 'A PNG image is required.' }, { status: 400 })
-  const provenance = analyzeProvenance(new Uint8Array(await file.arrayBuffer()))
-  return NextResponse.json({ provenance })
+  if (file.size > 25 * 1024 * 1024) return NextResponse.json({ error: 'Image exceeds the 25 MB limit.' }, { status: 413 })
+  const bytes = new Uint8Array(await file.arrayBuffer())
+  const provenance = await analyzeProvenance(bytes)
+  return NextResponse.json({ provenance, source: 'embedded PNG metadata parsed server-side; no AI classifier or signature trust-chain validation is claimed' })
 }
